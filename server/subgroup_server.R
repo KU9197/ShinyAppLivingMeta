@@ -23,7 +23,7 @@ output$subgroup_att_table <- renderDT({
   
   moderators_att <- c(
     "VRHMD", "AR", "ThreeD", "NonXR_comparison",
-    "overlay_element", "XRfam", "product_benefit",
+    "overlay_element", "XRfam", "hedonic_utilitarian_product",
     "fit_uncertainty", "brand_familiarity", "year",
     "uncertainty_avoidance", "mean_age", "shopper_behavior",
     "Pub_Status", "Pub_Ranking", "academic_field", "Design"
@@ -45,7 +45,7 @@ output$subgroup_beh_table <- renderDT({
   
   moderators_att <- c(
     "VRHMD", "AR", "ThreeD", "NonXR_comparison",
-    "overlay_element", "XRfam", "product_benefit",
+    "overlay_element", "XRfam", "hedonic_utilitarian_product",
     "fit_uncertainty", "brand_familiarity", "year",
     "uncertainty_avoidance", "mean_age", "shopper_behavior",
     "Pub_Status", "Pub_Ranking", "academic_field", "Design"
@@ -67,7 +67,7 @@ output$subgroup_img_table <- renderDT({
   
   moderators_img <- c(
     "VRHMD", "AR", "ThreeD",
-    "overlay_element", "XRfam", "product_benefit",
+    "overlay_element", "XRfam", "hedonic_utilitarian_product",
     "fit_uncertainty", "brand_familiarity", "year",
     "uncertainty_avoidance", "mean_age", "shopper_behavior",
     "Pub_Status", "Pub_Ranking", "academic_field",
@@ -90,7 +90,7 @@ output$subgroup_vid_table <- renderDT({
   
   moderators_img <- c(
     "VRHMD", "AR", "ThreeD",
-    "overlay_element", "XRfam", "product_benefit",
+    "overlay_element", "XRfam", "hedonic_utilitarian_product",
     "fit_uncertainty", "brand_familiarity", "year",
     "uncertainty_avoidance", "mean_age", "shopper_behavior",
     "Pub_Status", "Pub_Ranking", "academic_field",
@@ -109,17 +109,26 @@ output$subgroup_ar_table <- renderDT({
   
   data <- exp_data()$data_wo_outliers3
   dataAR <- data[as.character(data$AR) == "1", ]
-  req(nrow(dataAR) > 0)
+  if (nrow(dataAR) == 0) {
+    return(datatable(data.frame(Message = "No rows found for AR=1."), options = list(dom = "t"), rownames = FALSE))
+  }
   
   moderators_xr <- c(
     "NonXR_comparison", "overlay_element", "XRfam",
-    "product_benefit", "fit_uncertainty", "brand_familiarity",
+    "hedonic_utilitarian_product", "fit_uncertainty", "brand_familiarity",
     "year", "uncertainty_avoidance", "mean_age",
     "shopper_behavior", "Pub_Status", "Pub_Ranking",
     "academic_field", "outcome_variable", "Design"
   )
   
-  model_ar <- run_meta_regression(dataAR, moderators_xr)
+  model_ar <- tryCatch(
+    run_meta_regression(dataAR, moderators_xr),
+    error = function(e) e
+  )
+  
+  if (inherits(model_ar, "error")) {
+    return(datatable(data.frame(Message = paste("AR model error:", conditionMessage(model_ar))), options = list(dom = "t"), rownames = FALSE))
+  }
   
   datatable(extract_coef_table(model_ar),
             options = list(pageLength = 20, scrollX = TRUE),
@@ -131,17 +140,26 @@ output$subgroup_vrhmd_table <- renderDT({
   
   data <- exp_data()$data_wo_outliers3
   dataVRHMD <- data[as.character(data$VRHMD) == "1", ]
-  req(nrow(dataVRHMD) > 0)
+  if (nrow(dataVRHMD) == 0) {
+    return(datatable(data.frame(Message = "No rows found for VRHMD=1."), options = list(dom = "t"), rownames = FALSE))
+  }
   
   moderators_xr <- c(
     "NonXR_comparison", "overlay_element", "XRfam",
-    "product_benefit", "fit_uncertainty", "brand_familiarity",
+    "hedonic_utilitarian_product", "fit_uncertainty", "brand_familiarity",
     "year", "uncertainty_avoidance", "mean_age",
     "shopper_behavior", "Pub_Status", "Pub_Ranking",
     "academic_field", "outcome_variable", "Design"
   )
   
-  model_vrhmd <- run_meta_regression(dataVRHMD, moderators_xr)
+  model_vrhmd <- tryCatch(
+    run_meta_regression(dataVRHMD, moderators_xr),
+    error = function(e) e
+  )
+  
+  if (inherits(model_vrhmd, "error")) {
+    return(datatable(data.frame(Message = paste("VRHMD model error:", conditionMessage(model_vrhmd))), options = list(dom = "t"), rownames = FALSE))
+  }
   
   datatable(extract_coef_table(model_vrhmd),
             options = list(pageLength = 20, scrollX = TRUE),
@@ -153,17 +171,26 @@ output$subgroup_vrpc_table <- renderDT({
   
   data <- exp_data()$data_wo_outliers3
   dataVRPC <- data[as.character(data$VRPC) == "1", ]
-  req(nrow(dataVRPC) > 0)
+  if (nrow(dataVRPC) == 0) {
+    return(datatable(data.frame(Message = "No rows found for VRPC=1."), options = list(dom = "t"), rownames = FALSE))
+  }
   
   moderators_xr <- c(
     "NonXR_comparison", "overlay_element", "XRfam",
-    "product_benefit", "fit_uncertainty", "brand_familiarity",
+    "hedonic_utilitarian_product", "fit_uncertainty", "brand_familiarity",
     "year", "uncertainty_avoidance", "mean_age",
     "shopper_behavior", "Pub_Status", "Pub_Ranking",
     "academic_field", "outcome_variable", "Design"
   )
   
-  model_vrpc <- run_meta_regression(dataVRPC, moderators_xr)
+  model_vrpc <- tryCatch(
+    run_meta_regression(dataVRPC, moderators_xr),
+    error = function(e) e
+  )
+  
+  if (inherits(model_vrpc, "error")) {
+    return(datatable(data.frame(Message = paste("VRPC model error:", conditionMessage(model_vrpc))), options = list(dom = "t"), rownames = FALSE))
+  }
   
   datatable(extract_coef_table(model_vrpc),
             options = list(pageLength = 20, scrollX = TRUE),
@@ -175,19 +202,84 @@ output$subgroup_3d_table <- renderDT({
   
   data <- exp_data()$data_wo_outliers3
   data3D <- data[as.character(data$ThreeD) == "1", ]
-  req(nrow(data3D) > 0)
+  if (nrow(data3D) == 0) {
+    return(datatable(data.frame(Message = "No rows found for ThreeD=1."), options = list(dom = "t"), rownames = FALSE))
+  }
   
   moderators_xr <- c(
     "NonXR_comparison", "overlay_element", "XRfam",
-    "product_benefit", "fit_uncertainty", "brand_familiarity",
+    "hedonic_utilitarian_product", "fit_uncertainty", "brand_familiarity",
     "year", "uncertainty_avoidance", "mean_age",
     "shopper_behavior", "Pub_Status", "Pub_Ranking",
     "academic_field", "outcome_variable", "Design"
   )
   
-  model_3d <- run_meta_regression(data3D, moderators_xr)
+  model_3d <- tryCatch(
+    run_meta_regression(data3D, moderators_xr),
+    error = function(e) e
+  )
+  
+  if (inherits(model_3d, "error")) {
+    return(datatable(data.frame(Message = paste("3D model error:", conditionMessage(model_3d))), options = list(dom = "t"), rownames = FALSE))
+  }
   
   datatable(extract_coef_table(model_3d),
+            options = list(pageLength = 20, scrollX = TRUE),
+            rownames = FALSE)
+})
+
+output$subgroup_mediators_mental_table <- renderDT({
+  req(input$subgroup_type == "mediators")
+  
+  data <- mediators_data()$data_wo_outliers3
+  dataMeds2 <- data[as.character(data$relationship) == "2", ]
+  req(nrow(dataMeds2) > 0)
+  
+  # Mean imputation for consistency with original logic
+  if ("mean_age" %in% names(dataMeds2) && any(is.na(dataMeds2$mean_age))) {
+    dataMeds2$mean_age[is.na(dataMeds2$mean_age)] <- mean(dataMeds2$mean_age, na.rm = TRUE)
+  }
+  
+  moderators_meds <- c(
+    "VRHMD", "AR", "ThreeD",
+    "nonXRcomparison", "overlay_element", "XRfam",
+    "hedonic_utilitarian_product", "fit_uncertainty", "brand_familiarity",
+    "year", "uncertainty_avoidance", "mean_age",
+    "shopper_behavior", "Pub_Status", "Pub_Ranking",
+    "academic_field", "Design"
+  )
+  
+  model_meds2 <- run_meta_regression(dataMeds2, moderators_meds, yi = "ESRAW_Z", V = "ES_VAR_Z")
+  
+  datatable(extract_coef_table(model_meds2),
+            options = list(pageLength = 20, scrollX = TRUE),
+            rownames = FALSE)
+})
+
+output$subgroup_mediators_info_table <- renderDT({
+  req(input$subgroup_type == "mediators")
+  
+  data <- mediators_data()$data_wo_outliers3
+  dataMeds3 <- data[as.character(data$relationship) == "3", ]
+  req(nrow(dataMeds3) > 0)
+  
+  # Mean imputation for consistency with original logic
+  if ("mean_age" %in% names(dataMeds3) && any(is.na(dataMeds3$mean_age))) {
+    dataMeds3$mean_age[is.na(dataMeds3$mean_age)] <- mean(dataMeds3$mean_age, na.rm = TRUE)
+  }
+  
+  moderators_meds <- c(
+    "VRHMD", "AR", "ThreeD",
+    "nonXRcomparison", "overlay_element", "XRfam",
+    "hedonic_utilitarian_product", "fit_uncertainty", "brand_familiarity",
+    "year", "uncertainty_avoidance", "mean_age",
+    "shopper_behavior", "Pub_Status", "Pub_Ranking",
+    "academic_field", "Design"
+  )
+  
+  model_meds3 <- run_meta_regression(dataMeds3, moderators_meds, yi = "ESRAW_Z", V = "ES_VAR_Z")
+  
+  datatable(extract_coef_table(model_meds3),
             options = list(pageLength = 20, scrollX = TRUE),
             rownames = FALSE)
 })

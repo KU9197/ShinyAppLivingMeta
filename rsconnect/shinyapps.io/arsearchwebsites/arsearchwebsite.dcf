@@ -5,7 +5,7 @@ account: arsearchwebsites
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 16079313
-bundleId: 11500282
+bundleId: 11736332
 url: https://arsearchwebsites.shinyapps.io/arsearchwebsite/
 version: 1
 asMultiple: FALSE

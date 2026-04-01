@@ -10,13 +10,13 @@ output$robustness_table <- renderDT({
     
     # Run univariate meta-regressions
     moderators <- c("AR", "VRHMD", "VRPC", "ThreeD", "overlay_element", 
-                    "product_benefit", "fit_uncertainty", "brand_familiarity", 
+                    "hedonic_utilitarian_product", "fit_uncertainty", "brand_familiarity", 
                     "uncertainty_avoidance", "mean_age", "shopper_behavior", 
                     "Pub_Status", "Pub_Ranking", "academic_field", 
                     "NonXR_comparison", "outcome_variable", "Design", "year", "XRfam")
     
     # Mean center continuous variables
-    continuous_vars <- c("product_benefit", "fit_uncertainty", 
+    continuous_vars <- c("hedonic_utilitarian_product", "fit_uncertainty", 
                          "uncertainty_avoidance", "mean_age", "year")
     
     for(var in continuous_vars) {
@@ -26,7 +26,7 @@ output$robustness_table <- renderDT({
     }
     
     # Update moderator names
-    moderators <- gsub("product_benefit", "product_benefit_MC", moderators)
+    moderators <- gsub("hedonic_utilitarian_product", "hedonic_utilitarian_product_MC", moderators)
     moderators <- gsub("fit_uncertainty", "fit_uncertainty_MC", moderators)
     moderators <- gsub("uncertainty_avoidance", "uncertainty_avoidance_MC", moderators)
     moderators <- gsub("mean_age", "mean_age_MC", moderators)
@@ -56,7 +56,7 @@ output$robustness_table <- renderDT({
     data_main$mean_age[is.na(data_main$mean_age)] <- mean(data_main$mean_age, na.rm = TRUE)
     
     moderators <- c("VRHMD", "AR", "ThreeD", "NonXR_comparison", 
-                    "overlay_element", "XRfam", "product_benefit", 
+                    "overlay_element", "XRfam", "hedonic_utilitarian_product", 
                     "fit_uncertainty", "brand_familiarity", "year", 
                     "uncertainty_avoidance", "mean_age", "shopper_behavior", 
                     "Pub_Status", "Pub_Ranking", "academic_field", 
@@ -86,7 +86,7 @@ output$robustness_table <- renderDT({
       mean(data_wo_outliers3SD$mean_age, na.rm = TRUE)
     
     moderators <- c("VRHMD", "AR", "ThreeD", "NonXR_comparison", 
-                    "overlay_element", "XRfam", "product_benefit", 
+                    "overlay_element", "XRfam", "hedonic_utilitarian_product", 
                     "fit_uncertainty", "brand_familiarity", "year", 
                     "uncertainty_avoidance", "mean_age", "shopper_behavior", 
                     "Pub_Status", "Pub_Ranking", "academic_field", 
@@ -109,7 +109,7 @@ output$robustness_table <- renderDT({
       mean(data_wo_outliers3$mean_age, na.rm = TRUE)
     
     moderators <- c("VRHMD", "AR", "ThreeD", "NonXR_comparison", 
-                    "overlay_element", "XRfam", "product_benefit", 
+                    "overlay_element", "XRfam", "hedonic_utilitarian_product", 
                     "fit_uncertainty", "brand_familiarity", "year", 
                     "uncertainty_avoidance", "mean_age", "shopper_behavior")
     
@@ -130,7 +130,7 @@ output$robustness_table <- renderDT({
       mean(data_wo_outliers3$mean_age, na.rm = TRUE)
     
     moderators <- c("VRHMD", "AR", "ThreeD", "NonXR_comparison", 
-                    "overlay_element", "XRfam", "product_benefit", 
+                    "overlay_element", "XRfam", "hedonic_utilitarian_product", 
                     "fit_uncertainty", "brand_familiarity", "year", 
                     "uncertainty_avoidance", "mean_age", "shopper_behavior", 
                     "Pub_Status", "Pub_Ranking", "academic_field", 
@@ -156,7 +156,7 @@ output$robustness_table <- renderDT({
     data_wo_outliers3$mean_age[data_wo_outliers3$mean_age == mean_value] <- median_value
     
     moderators <- c("VRHMD", "AR", "ThreeD", "NonXR_comparison", 
-                    "overlay_element", "XRfam", "product_benefit", 
+                    "overlay_element", "XRfam", "hedonic_utilitarian_product", 
                     "fit_uncertainty", "brand_familiarity", "year", 
                     "uncertainty_avoidance", "mean_age", "shopper_behavior", 
                     "Pub_Status", "Pub_Ranking", "academic_field", 

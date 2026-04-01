@@ -8,7 +8,7 @@ output$meta_regression_table <- renderDT({
     
     moderators <- c(
       "VRHMD", "AR", "ThreeD", "NonXR_comparison",
-      "overlay_element", "XRfam", "product_benefit",
+      "overlay_element", "XRfam", "hedonic_utilitarian_product",
       "fit_uncertainty", "brand_familiarity", "year",
       "uncertainty_avoidance", "mean_age", "shopper_behavior",
       "Pub_Status", "Pub_Ranking", "academic_field",
@@ -34,12 +34,12 @@ output$meta_regression_table <- renderDT({
     
     # original script imputes these in correlational meta-regression
     data$mean_age[is.na(data$mean_age)] <- mean(data$mean_age, na.rm = TRUE)
-    data$product_benefit[is.na(data$product_benefit)] <- mean(data$product_benefit, na.rm = TRUE)
+    data$hedonic_utilitarian_product[is.na(data$hedonic_utilitarian_product)] <- mean(data$hedonic_utilitarian_product, na.rm = TRUE)
     data$fit_uncertainty[is.na(data$fit_uncertainty)] <- mean(data$fit_uncertainty, na.rm = TRUE)
     
     moderators <- c(
       "VRHMD", "AR", "ThreeD", "overlay_element", "XRfam",
-      "product_benefit", "fit_uncertainty", "brand_familiarity",
+      "hedonic_utilitarian_product", "fit_uncertainty", "brand_familiarity",
       "year", "uncertainty_avoidance", "mean_age", "shopper_behavior",
       "Pub_Status", "Pub_Ranking", "academic_field", "outcome_variable"
     )
@@ -76,7 +76,7 @@ output$predicted_values_table <- renderDT({
   
   moderators <- c(
     "VRHMD", "AR", "ThreeD", "NonXR_comparison",
-    "overlay_element", "XRfam", "product_benefit",
+    "overlay_element", "XRfam", "hedonic_utilitarian_product",
     "fit_uncertainty", "brand_familiarity", "year",
     "uncertainty_avoidance", "mean_age", "shopper_behavior",
     "Pub_Status", "Pub_Ranking", "academic_field",
@@ -106,14 +106,14 @@ output$predicted_values_table <- renderDT({
   }
   
   # Create mean-centered vars exactly like original logic
-  pred_data$product_benefit_MC       <- scale(pred_data$product_benefit, center = TRUE, scale = FALSE)
+  pred_data$hedonic_utilitarian_product_MC       <- scale(pred_data$hedonic_utilitarian_product, center = TRUE, scale = FALSE)
   pred_data$fit_uncertainty_MC       <- scale(pred_data$fit_uncertainty, center = TRUE, scale = FALSE)
   pred_data$uncertainty_avoidance_MC <- scale(pred_data$uncertainty_avoidance, center = TRUE, scale = FALSE)
   pred_data$mean_age_MC              <- scale(pred_data$mean_age, center = TRUE, scale = FALSE)
   pred_data$year_MC                  <- scale(pred_data$year, center = TRUE, scale = FALSE)
   
   mc_vars <- c(
-    "product_benefit_MC", "fit_uncertainty_MC",
+    "hedonic_utilitarian_product_MC", "fit_uncertainty_MC",
     "year_MC", "uncertainty_avoidance_MC", "mean_age_MC"
   )
   
@@ -125,7 +125,7 @@ output$predicted_values_table <- renderDT({
     NonXR_comparison = mean(pred_data$NonXR_comparison, na.rm = TRUE),
     overlay_element = mean(pred_data$overlay_element, na.rm = TRUE),
     XRfam = mean(pred_data$XRfam, na.rm = TRUE),
-    product_benefit_MC = mean(pred_data$product_benefit_MC, na.rm = TRUE),
+    hedonic_utilitarian_product_MC = mean(pred_data$hedonic_utilitarian_product_MC, na.rm = TRUE),
     fit_uncertainty_MC = mean(pred_data$fit_uncertainty_MC, na.rm = TRUE),
     brand_familiarity = mean(pred_data$brand_familiarity, na.rm = TRUE),
     year_MC = mean(pred_data$year_MC, na.rm = TRUE),
@@ -217,7 +217,7 @@ output$descriptives_continuous_table <- renderDT({
   data <- exp_data()$data_wo_outliers3
   N_sample <- data[!duplicated(data$IDd), ]
   
-  cont_vars <- c("product_benefit", "fit_uncertainty", "uncertainty_avoidance", "mean_age", "year")
+  cont_vars <- c("hedonic_utilitarian_product", "fit_uncertainty", "uncertainty_avoidance", "mean_age", "year")
   
   df <- do.call(rbind, lapply(cont_vars, function(var) {
     if (var %in% colnames(data)) {

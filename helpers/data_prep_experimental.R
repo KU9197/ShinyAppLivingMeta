@@ -25,7 +25,7 @@ prepare_experimental_data <- function(file_path = "data/Dataset_MainNEW.xlsx") {
   data_main$overlay_element <- as.factor(data_main$overlay_element)
   data_main$XRfam <- as.factor(data_main$XRfam)
   data_main$Design <- as.factor(data_main$Design)
-  data_main$product_benefit <- as.numeric(data_main$product_benefit)
+  data_main$hedonic_utilitarian_product <- as.numeric(data_main$hedonic_utilitarian_product)
   data_main$fit_uncertainty <- as.numeric(data_main$fit_uncertainty)
   data_main$brand_familiarity <- as.factor(data_main$brand_familiarity)
   data_main$uncertainty_avoidance <- as.numeric(data_main$uncertainty_avoidance)

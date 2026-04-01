@@ -25,7 +25,8 @@ tagList(
           choices = c(
             "Outcome Variable" = "outcome",
             "Non-XR Comparison" = "comparison",
-            "XR Types" = "xr_type"
+            "XR Types" = "xr_type",
+            "Mediators" = "mediators"
           ),
           selected = "outcome"
         )
@@ -84,6 +85,20 @@ tagList(
           title = "3D (Meta-Regression)", width = NULL,
           status = "primary", solidHeader = TRUE,
           div(style = "width:100%; overflow-x:auto;", DTOutput("subgroup_3d_table"))
+        )
+      ),
+      
+      conditionalPanel(
+        condition = "input.subgroup_type == 'mediators'",
+        box(
+          title = "XRMentalSimulation (relationship = 2)", width = NULL,
+          status = "primary", solidHeader = TRUE,
+          div(style = "width:100%; overflow-x:auto;", DTOutput("subgroup_mediators_mental_table"))
+        ),
+        box(
+          title = "XRInformationAssessment (relationship = 3)", width = NULL,
+          status = "primary", solidHeader = TRUE,
+          div(style = "width:100%; overflow-x:auto;", DTOutput("subgroup_mediators_info_table"))
         )
       )
     )

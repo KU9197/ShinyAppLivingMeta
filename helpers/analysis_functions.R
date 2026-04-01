@@ -196,6 +196,9 @@ generate_dataset_description <- function(data) {
 
 # Run meta-regression (aligned to original script approach)
 run_meta_regression <- function(data, moderators, yi = "ESRAW", V = "ES_VAR") {
+  # Work on a local copy so model prep (imputation/centering/type conversions)
+  # can't mutate cached/shared data frames used by other outputs.
+  data <- as.data.frame(data, check.names = FALSE)
   
   # Mean imputation for mean_age if needed (original script does this widely)
   if ("mean_age" %in% moderators && "mean_age" %in% colnames(data)) {
@@ -205,7 +208,7 @@ run_meta_regression <- function(data, moderators, yi = "ESRAW", V = "ES_VAR") {
   }
   
   # Mean-center continuous variables (original uses *_MC)
-  continuous_vars <- c("product_benefit", "fit_uncertainty",
+  continuous_vars <- c("hedonic_utilitarian_product", "fit_uncertainty",
                        "uncertainty_avoidance", "mean_age", "year")
   
   for (var in continuous_vars) {
@@ -226,7 +229,7 @@ run_meta_regression <- function(data, moderators, yi = "ESRAW", V = "ES_VAR") {
   }
   
   # Update moderator names for mean-centered vars
-  moderators <- gsub("\\bproduct_benefit\\b", "product_benefit_MC", moderators)
+  moderators <- gsub("\\bhedonic_utilitarian_product\\b", "hedonic_utilitarian_product_MC", moderators)
   moderators <- gsub("\\bfit_uncertainty\\b", "fit_uncertainty_MC", moderators)
   moderators <- gsub("\\buncertainty_avoidance\\b", "uncertainty_avoidance_MC", moderators)
   moderators <- gsub("\\bmean_age\\b", "mean_age_MC", moderators)

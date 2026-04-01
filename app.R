@@ -15,6 +15,11 @@ source("helpers/plot_functions.R")
 
 exp_cache  <- readRDS("data/cache/exp_cache.rds")
 corr_cache <- readRDS("data/cache/corr_cache.rds")
+# mediators cache may not exist yet (first run after code changes)
+mediators_cache <- tryCatch(
+  readRDS("data/cache/mediators_cache.rds"),
+  error = function(e) NULL
+)
 
 # UI
 ui <- dashboardPage(
@@ -67,6 +72,13 @@ server <- function(input, output, session) {
   # Provide cached datasets as reactives for all modules
   exp_data <- reactive(exp_cache)
   corr_data <- reactive(corr_cache)
+  mediators_data <- reactive({
+    if (is.null(mediators_cache)) {
+      init_mediators_data()
+    } else {
+      mediators_cache
+    }
+  })
   
   
   # Source server modules
